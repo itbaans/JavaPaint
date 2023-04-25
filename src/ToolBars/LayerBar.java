@@ -15,6 +15,7 @@ public class LayerBar extends Toolbar {
     private ActiveButton add;
     private ActiveButton uP;
     private ActiveButton down;
+    private Color color;
 
     //a custom list created for layers that creates,remove and swap up and down as functions
     private LayersEngine layers;
@@ -31,12 +32,13 @@ public class LayerBar extends Toolbar {
         x = 1280;
         y = 60;
         layers.append();
+        color = new Color(223, 238, 221);
 
     }
 
     public void draw(Graphics g) {
 
-        g.setColor(Color.darkGray);
+        g.setColor(color);
         g.fillRect(x, y, width, height);
 
         remove.drawButtonImage(g, null);

@@ -23,6 +23,7 @@ public class MenuBar extends Toolbar {
     public MenuBar() {
 
         fileMenu = new DropDownButton("FileMenu", 0, 0, "src/FileMenuIcons/square_depressed.png", "src/FileMenuIcons/square_pressed.png");
+        fileMenu.setToolTipContent("File operations");
         newButton = new ActiveButton("New", 0, 60, "src/FileMenuIcons/temp1.png", "src/FileMenuIcons/temp1_pres.png");
         newButton.setListener(new ButtonListener() {
             @Override
@@ -31,6 +32,7 @@ public class MenuBar extends Toolbar {
                 
             }
         });
+        newButton.setToolTipContent("Open new file (Ctrl + N)");
         fileMenu.addComponents(newButton);
 
         openButton = new ActiveButton("Open", 45, 60, "src/FileMenuIcons/temp2.png", "src/FileMenuIcons/temp2_pres.png");
@@ -41,6 +43,7 @@ public class MenuBar extends Toolbar {
                 openWindow = new OpenWindow(397, 100, 500, 600);
             }
         });
+        openButton.setToolTipContent("Open saved files (Ctrl + O)");
         fileMenu.addComponents(openButton);
 
         saveButton = new ActiveButton("Save", 90, 60, "src/FileMenuIcons/temp3.png", "src/FileMenuIcons/temp3_pres.png");
@@ -52,6 +55,7 @@ public class MenuBar extends Toolbar {
             }
         });
         fileMenu.addComponents(saveButton);
+        saveButton.setToolTipContent("Save current file (Ctrl + S)");
 
         editMenu = new DropDownButton("EditMenu",60, 0, "src/EditMenuIcons/editMenu_dep.png", "src/EditMenuIcons/editMenu_pres.png");
         undoButton = new ActiveButton("Undo", 60, 60, "src/EditMenuIcons/Undo_dep.png", "src/EditMenuIcons/Undo_pres.png");
@@ -62,6 +66,7 @@ public class MenuBar extends Toolbar {
                 undoRedoState = "undo";
             }
         });
+        undoButton.setToolTipContent("get back in the past without ur mistakes (Ctrl + Z)");
         editMenu.addComponents(undoButton);
 
         redoButton = new ActiveButton("Redo", 105,60, "src/EditMenuIcons/Redo_dep.png", "src/EditMenuIcons/Redo_pres.png");
@@ -72,9 +77,10 @@ public class MenuBar extends Toolbar {
                 undoRedoState = "redo";
             }
         });
+        redoButton.setToolTipContent("u are now realizing you were wrong about the thought that you were wrong (Ctrl + Y)");
         editMenu.addComponents(redoButton);
 
-        color = Color.lightGray;
+        color = new Color(160, 207, 202);
         width = 1500;
         height = 60;
     }

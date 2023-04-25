@@ -10,12 +10,14 @@ public class ToolTip {
 
     
     private Font font;
+    private Color color;
     
     private static ToolTip instance = new ToolTip();
 
     private ToolTip() {
 
         font = new Font("Arial", Font.PLAIN, 12);
+        color = new Color(255, 164, 209);
 
     }
 
@@ -27,7 +29,7 @@ public class ToolTip {
 
     public void drawToolTip(Graphics g, String data, int x, int y, int width, int height) {
         
-        g.setColor(Color.cyan);
+        g.setColor(color);
         int cellX = x+width;
         int cellY = y+height;
         FontMetrics m = g.getFontMetrics();

@@ -92,6 +92,7 @@ public class MainWindow extends MyWindow {
     public void onMove(int x, int y) {
         menuBar.onMove(x, y);
         shapesBar.onMove(x, y);
+        colorBar.onMove(x, y);
     }
 
 

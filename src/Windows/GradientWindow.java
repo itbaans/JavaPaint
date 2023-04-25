@@ -13,7 +13,6 @@ public class GradientWindow extends MyWindow {
     private ActiveColorButton[][] gradient = new ActiveColorButton[250][300];
     private ActiveColorButton[] basicColors = new ActiveColorButton[20];
     private ActiveColorButton[] customColors = new ActiveColorButton[15];
-    private TitleBar tB;
     private ActiveButton addColor;
     //marker class was experimental which didnt work as intended
     private Marker gMarker = new Marker(1, 1);
@@ -38,10 +37,9 @@ public class GradientWindow extends MyWindow {
        initializeGradient();
        initializeColors();
        
-       tB = new TitleBar("Edit Colors", x, y, width, (int)(height*0.1));
+       tBar = new TitleBar("Edit Colors", x, y, width, (int)(height*0.1));
        addColor = new ActiveButton("Add Color", 495, 514, 70, 30, "src/GradinetWindow/addColor.png", "src/GradinetWindow/addColor_press.png");
        addColor.setListener(new ButtonListener() {
-
         @Override
         public void click(int x, int y) {     
             System.out.println("color added");
@@ -119,9 +117,20 @@ public class GradientWindow extends MyWindow {
                 }
             }
 
-            tB.draw(g);
-            tB.drawButton(g);
-            addColor.drawButtonImageWithText(g, null);       
+            tBar.draw(g);
+            tBar.drawButton(g);
+            addColor.drawButtonImageWithText(g, null);
+            
+            if(tBar.closeButton.getToolTipState()) tBar.closeButton.drawToolTip(g);
+            if(addColor.getToolTipState()) addColor.drawToolTip(g);
+            
+            for (ActiveButton b : basicColors) {
+                if(b.getToolTipState()) b.drawToolTip(g);
+            }
+            for (ActiveButton b : customColors) {
+                if(b.getToolTipState()) b.drawToolTip(g);
+            }
+
         }    
         
     }
@@ -136,7 +145,8 @@ public class GradientWindow extends MyWindow {
 
         for (int i = 0; i < basicColors.length; i++) {
 
-            basicColors[i] = new ActiveColorButton(x, y, height, width,colors[i]);            
+            basicColors[i] = new ActiveColorButton(x, y, height, width,colors[i]);
+            basicColors[i].setToolTipContent("R:"+colors[i].getRed()+" G:"+colors[i].getGreen()+" B:"+colors[i].getBlue());          
             x += width+15;
 
             if (x-465 >= 170) {
@@ -173,13 +183,14 @@ public class GradientWindow extends MyWindow {
             addColor.getListener().click(x, y);
             for (int i = 0; i < customColors.length; i++) {
                     if(customColors[i].isEmpty) { 
-                    customColors[i].setColor(currentColor);                
+                    customColors[i].setColor(currentColor);
+                    customColors[i].setToolTipContent("R:"+currentColor.getRed()+" G:"+currentColor.getGreen()+" B:"+currentColor.getBlue());             
                     break;
-                    }                
+                }
             }
         }
 
-        if(tB.closeButton.IsClicked(x, y)) {
+        if(tBar.closeButton.IsClicked(x, y)) {
             windowClose = true;            
         } 
     }
@@ -212,6 +223,17 @@ public class GradientWindow extends MyWindow {
             }
         }
 
+    }
+
+    public void onMove(int x, int y) {
+        tBar.closeButton.setToolTipState(x, y);
+        addColor.setToolTipState(x, y);
+        for (ActiveColorButton b : basicColors) {
+            b.setToolTipState(x, y);
+        }
+        for (ActiveColorButton b : customColors) {
+            if(!b.isEmpty) b.setToolTipState(x, y);
+        }
     }
 
     public void setWindowClose(boolean x) {

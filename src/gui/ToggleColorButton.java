@@ -8,13 +8,10 @@ import java.awt.Graphics;
 
 public class ToggleColorButton extends ToggleButton {
 
-    protected String title;
-
-
     public ToggleColorButton(String title,int x, int y, int height, int width, Color color) {
 
         super(x, y, height, width, color);
-        this.title = title;        
+        this.title = title;
         
     }
 
@@ -74,9 +71,4 @@ public class ToggleColorButton extends ToggleButton {
 		color = c;
 	}
 
-    public void drawToolTip(Graphics g) {
-		if(isDrawed)
-		toolTip.drawToolTip(g, title, x, y, width, height);
-	}
-  
 }

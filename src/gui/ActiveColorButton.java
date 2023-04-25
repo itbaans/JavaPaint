@@ -82,12 +82,7 @@ public class ActiveColorButton extends ActiveButton {
 		color = c;
 	}
 
-    public void drawToolTip(Graphics g) {
-		if(isDrawed) {
-        String rgb = color.getRGB()+"";
-		toolTip.drawToolTip(g, rgb, x, y, width, height);
-        }
-	}
+    
 
 
     

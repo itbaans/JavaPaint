@@ -39,6 +39,12 @@ public class OpenWindow extends MyWindow {
             }
         }
 
+        for (ToggleColorButton b : buttons) { 
+            b.setToolTipContent("open this file");
+        }
+
+        
+
     }
 
     public void draw(Graphics g) {
@@ -50,8 +56,7 @@ public class OpenWindow extends MyWindow {
             tBar.draw(g);
             tBar.drawButton(g);
             if(tBar.closeButton.getToolTipState()) tBar.closeButton.drawToolTip(g);
-            
-
+                       
             for (ToggleColorButton b : buttons) {
                 b.drawButtonShapeWithText(g);
                 if(b.getToolTipState()) b.drawToolTip(g);

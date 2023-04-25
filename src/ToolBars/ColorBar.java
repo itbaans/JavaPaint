@@ -41,6 +41,7 @@ public class ColorBar extends Toolbar {
         strokeColor = stroke_color.getColor();
         fillColor = fill_color.getColor();
         gWButton = new ActiveButton("gradient", 858, 720, 40, 40, "src/GradinetWindow/gradient.PNG", "src/GradinetWindow/gradient _press.PNG");
+        gWButton.setToolTipContent("make ur own color");
 
         int temp = 0;
         int temp2 = 0;    
@@ -61,6 +62,12 @@ public class ColorBar extends Toolbar {
                 }
             }
         }
+
+        for (ActiveColorButton b : colorButtons) {
+            if(!b.isEmpty) b.setToolTipContent("R:"+b.getColor().getRed()+" G:"+b.getColor().getGreen()+" B:"+b.getColor().getBlue());
+        }
+
+
     }
 
     public void draw(Graphics g) {
@@ -72,6 +79,7 @@ public class ColorBar extends Toolbar {
         g.setColor(Color.black);
         g.setFont(font);
         g.drawString(stroke_color.getTitle(), 476, 776);
+        
 
         fill_color.drawButtonShape(g);
         g.setColor(Color.black);
@@ -88,8 +96,19 @@ public class ColorBar extends Toolbar {
             b.drawButtonShape(g);
             else b.drawEmptyShape(g);
         }
+        stroke_color.setToolTipContent("Current stroke color: R:"+stroke_color.getColor().getRed()+" G:"+stroke_color.getColor().getGreen()+" B:"+stroke_color.getColor().getBlue());
+        if(stroke_color.getToolTipState()) stroke_color.drawToolTip(g);
 
-        if(windowOpen)
+        fill_color.setToolTipContent("Current fill color: R:"+fill_color.getColor().getRed()+" G:"+fill_color.getColor().getGreen()+" B:"+fill_color.getColor().getBlue());
+        if(fill_color.getToolTipState()) fill_color.drawToolTip(g);
+
+        for (ActiveColorButton b : colorButtons) {
+            if(!b.isEmpty && b.getToolTipState()) b.drawToolTip(g);
+        }
+
+        if(gWButton.getToolTipState()) gWButton.drawToolTip(g);
+
+        if(windowOpen) 
         gW.draw(g);
 
     }
@@ -163,7 +182,9 @@ public class ColorBar extends Toolbar {
              windowOpen = true;
              gW.setWindowClose(false);
         }
-        if(!gW.getWindowClose()) gW.onPress(x, y);
+        if(!gW.getWindowClose()) {
+            gW.onPress(x, y);
+        } 
         
     }
 
@@ -175,7 +196,10 @@ public class ColorBar extends Toolbar {
             int temp = 20;
             for(int i = 0; i < gW.getCustomColors().length; i++) {
                 for(; temp < colorButtons.size();) {
-                    if(colorButtons.get(temp).isEmpty && !(gW.getCustomColors()[i].isEmpty)) colorButtons.get(temp).setColor(gW.getCustomColors()[i].getColor());
+                    if(colorButtons.get(temp).isEmpty && !(gW.getCustomColors()[i].isEmpty)) {
+                        colorButtons.get(temp).setColor(gW.getCustomColors()[i].getColor());
+                        colorButtons.get(temp).setToolTipContent("R:"+colorButtons.get(temp).getColor().getRed()+" G:"+colorButtons.get(temp).getColor().getGreen()+" B:"+colorButtons.get(temp).getColor().getBlue());
+                    } 
                     temp++;
                     break;
                 }
@@ -221,7 +245,14 @@ public class ColorBar extends Toolbar {
 
     @Override
     public void onMove(int x, int y) {
+        stroke_color.setToolTipState(x, y);
+        fill_color.setToolTipState(x, y);
+        for (ActiveColorButton b : colorButtons) {
+            b.setToolTipState(x, y);
+        }
         
+        gWButton.setToolTipState(x, y);
+        if(!gW.getWindowClose()) gW.onMove(x, y);
     }
 
 

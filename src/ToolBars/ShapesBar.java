@@ -34,7 +34,7 @@ public class ShapesBar extends Toolbar {
         this.y = 60;
         this.width = 150;
         this.height = 800;
-        color = Color.darkGray;
+        color = new Color(223, 238, 221);
         intiializeButtons();
 
     }
@@ -134,7 +134,7 @@ public class ShapesBar extends Toolbar {
         g.setColor(color);
         g.fillRect(x, y, width, height);
 
-        g.setColor(Color.lightGray);
+        g.setColor(Color.black);
         g.setFont(font);
         g.drawString("Drawing Items", 10, 85);
 

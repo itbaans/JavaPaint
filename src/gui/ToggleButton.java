@@ -32,6 +32,7 @@ public class ToggleButton extends Button {
 	protected Color color;
 	protected ButtonListener listener;
 	protected boolean toolTipState;
+	protected String toolTipContent = "";
 	
 
     public ToggleButton(String title, int x, int y, String depress_icon_path, String press_icon_path) {
@@ -183,6 +184,10 @@ public class ToggleButton extends Button {
 		return toolTipState;
 	}
 
+	public void setToolTipContent(String content) {
+		toolTipContent = content;
+	}
+
 
     public Boolean IsPressed()
 	{
@@ -216,8 +221,10 @@ public class ToggleButton extends Button {
 
 	@Override
 	public void drawToolTip(Graphics g) {
-		if(isDrawed)
-		toolTip.drawToolTip(g, title, x, y, width, height);
+		if(isDrawed) {
+		if(!toolTipContent.equals("")) toolTip.drawToolTip(g, toolTipContent, x, y, width, height);
+		else toolTip.drawToolTip(g, title, x, y, width, height);
+		}
 	}
 
 	
