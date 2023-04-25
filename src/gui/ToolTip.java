@@ -33,14 +33,13 @@ public class ToolTip {
         FontMetrics m = g.getFontMetrics();
       
         //System.out.println(x+" "+(x+width));
-		int textWidth = m.stringWidth(data);
-		int textHeight = m.getAscent() - m.getDescent();
-        Dimension cellDimension = new Dimension(textWidth, m.getHeight());
-        g.fillRect(cellX, cellY, (int)cellDimension.getWidth(), (int)cellDimension.getHeight());       
+		int textWidth = m.stringWidth(data);      
+        int textHeight = m.getAscent() - m.getDescent();
+        Dimension cellDimension = new Dimension(textWidth+2, m.getHeight()+2);
+        g.fillRect(cellX, cellY, (int)cellDimension.getWidth(), (int)cellDimension.getHeight());
         g.setColor(Color.black);
-        g.setFont(font);
-        
-        g.drawString(data, cellX + (int)cellDimension.getWidth() / 2 - textWidth / 2, cellY + (int)cellDimension.getHeight()/ 2 + textHeight / 2);
+        g.setFont(font);      
+        g.drawString(data, cellX + (int)(cellDimension.getWidth()) / 2 - textWidth / 2, cellY + (int)(cellDimension.getHeight())/ 2 + textHeight / 2);
         
 
     }
