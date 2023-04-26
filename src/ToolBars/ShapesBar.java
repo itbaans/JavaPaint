@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
+
+import javax.sound.sampled.SourceDataLine;
+
 import gui.*;
 import stackNqueueRecources.*;
 import ShapesClasses.*;
@@ -12,6 +15,10 @@ import java.awt.Point;
 public class ShapesBar extends Toolbar {
     
     private ArrayList<ToggleButton> shapeButtons = new ArrayList<>();
+    private ToggleButton smallStroke;
+    private ToggleButton mediumStroke;
+    private ToggleButton largeStroke;
+    private boolean shapeSelected;
     private String drawingState = "";
     private boolean gradientWindowState;
     private boolean openFolderState;
@@ -27,6 +34,15 @@ public class ShapesBar extends Toolbar {
     private boolean strokeClicked;
     private boolean fillClicked;
     private boolean mouseClicked;
+    private int strokeSize;
+    private ClickStorage clickStorage = new ClickStorage();
+    private Point startPoint = new Point();
+    private Point endPoint = new Point();
+    private Point controlPoint1 = new Point();
+    private Point controlPoint2 = new Point();
+    private int clickCounter = 0;
+    
+
 
     public ShapesBar() {
 
@@ -35,6 +51,7 @@ public class ShapesBar extends Toolbar {
         this.width = 150;
         this.height = 800;
         color = new Color(223, 238, 221);
+        strokeSize = 10;
         intiializeButtons();
 
     }
@@ -66,15 +83,15 @@ public class ShapesBar extends Toolbar {
         });
         shapeButtons.add(hexagon);
 
-        ToggleButton pentagon = new ToggleButton("Pentagon", tempX, tempY+=75, "src/Shapes/pentagon.png", "src/Shapes/pentagon_press.png");
-        pentagon.setListener(new ButtonListener() {
+        ToggleButton bezierCurve = new ToggleButton("BezierCurve", tempX, tempY+=75, "src/Shapes/curve.png", "src/Shapes/curve_press.png");
+        bezierCurve.setListener(new ButtonListener() {
             @Override
             public void click(int x, int y) {
-                System.out.println("Pentagon selected");
-                drawingState = "pentagon";
+                System.out.println("BezierCurve selected");
+                drawingState = "bezier curve";
             }            
         });
-        shapeButtons.add(pentagon);
+        shapeButtons.add(bezierCurve);
 
         ToggleButton rectangle = new ToggleButton("Rectangle", tempX+76, tempY, "src/Shapes/rectangle.png", "src/Shapes/rectangle_press.png");
         rectangle.setListener(new ButtonListener() {
@@ -123,7 +140,12 @@ public class ShapesBar extends Toolbar {
             }            
         });
         shapeButtons.add(pentaGram);
+
+        smallStroke =  new ToggleButton("small stroke", 15, 750, 35, 35, "src/Shapes/stroke Widths/small.png", "src/Shapes/stroke Widths/small_press.png");
+        mediumStroke = new ToggleButton("medium stroke", 55, 750, 35, 35, "src/Shapes/stroke Widths/medium.png", "src/Shapes/stroke Widths/medium_press.png");
+        largeStroke = new ToggleButton("large stroke", 95, 750, 35, 35, "src/Shapes/stroke Widths/large.png", "src/Shapes/stroke Widths/large_press.png");
         
+        smallStroke.SetPressed(true);
 
         font = new Font("Arial", Font.PLAIN, 20);
 
@@ -144,6 +166,13 @@ public class ShapesBar extends Toolbar {
                            
         }
 
+        smallStroke.drawButtonImage(g, null);
+        mediumStroke.drawButtonImage(g, null);
+        largeStroke.drawButtonImage(g, null);
+
+        if(smallStroke.getToolTipState()) smallStroke.drawToolTip(g);
+        if(mediumStroke.getToolTipState()) mediumStroke.drawToolTip(g);
+        if(largeStroke.getToolTipState()) largeStroke.drawToolTip(g);
 
 
     }
@@ -176,7 +205,7 @@ public class ShapesBar extends Toolbar {
                    int xSqr = (int)Math.pow((double) dragX-clickX, 2);
                    int ySqr = (int)Math.pow((double) dragY-clickY, 2);
                    int diam = (int) Math.sqrt(ySqr+xSqr);
-                   Circle circle = new Circle(diam, new Point(clickX, clickY), strokeColor, fillColor,15);
+                   Circle circle = new Circle(diam, new Point(clickX, clickY), strokeColor, fillColor,strokeSize);
                    if(stack != null)
                    stack.push(circle);
                    System.out.println("oush");
@@ -224,7 +253,7 @@ public class ShapesBar extends Toolbar {
                
                        }
 
-                       Hexagon hexagon = new Hexagon(xpoints, ypoints, strokeColor, fillColor, 15);
+                       Hexagon hexagon = new Hexagon(xpoints, ypoints, strokeColor, fillColor, strokeSize);
                        if(stack != null) stack.push(hexagon);
                        System.out.println("oush");
                        mouseReleased = false;
@@ -270,7 +299,7 @@ public class ShapesBar extends Toolbar {
                
                        }
 
-                       Triangle equiTriangle = new Triangle(xpoints, ypoints, strokeColor, fillColor, 10);
+                       Triangle equiTriangle = new Triangle(xpoints, ypoints, strokeColor, fillColor, strokeSize);
                        if(stack != null) stack.push(equiTriangle);
                        System.out.println("oush");
                        mouseReleased = false;            
@@ -330,7 +359,7 @@ public class ShapesBar extends Toolbar {
                     if(clickY > dragY)
                     ypoints[2] = clickY-opp;
 
-                    Triangle rightTriangle = new Triangle(xpoints, ypoints, strokeColor, fillColor, 10);
+                    Triangle rightTriangle = new Triangle(xpoints, ypoints, strokeColor, fillColor, strokeSize);
                     if(stack != null) stack.push(rightTriangle);
                     System.out.println("oush");
                     mouseReleased = false;
@@ -400,12 +429,77 @@ public class ShapesBar extends Toolbar {
             
                     }
 
-                    Pentagram pentagram = new Pentagram(xpoints, ypoints, strokeColor, fillColor, 10);
+                    Pentagram pentagram = new Pentagram(xpoints, ypoints, strokeColor, fillColor, strokeSize);
                     if(stack != null) stack.push(pentagram);
                     System.out.println("oush");
                     mouseReleased = false;            
                 }
                 break;
+
+            case"free drawing":
+                              
+                if(mouseDragging) {
+                                        
+                    g.setColor(strokeColor);
+                    int i = 0;
+                    while(i < clickStorage.getXStorage().size()) {
+                    g.fillOval(clickStorage.getXStorage().get(i), clickStorage.getYStorage().get(i), (int)(strokeSize*0.8), (int)(strokeSize*0.8));
+                    i++;
+                    }
+                    
+                }
+
+                if(mouseReleased && stack != null) {
+                    mouseDragging = false;
+                    FreeDrawing freeDrawing = new FreeDrawing(strokeColor, strokeSize);
+                    for(int i = 0; i < clickStorage.getXStorage().size(); i++) {
+                        //System.out.println("storage: "+clickStorage.getXStorage().get(i)+" "+clickStorage.getYStorage().get(i));
+                        freeDrawing.addPoints(clickStorage.getXStorage().get(i), clickStorage.getYStorage().get(i));
+                    }
+                    mouseDragging = false;
+                    if(stack != null) stack.push(freeDrawing);
+                    System.out.println("oush");
+                    clickStorage.cleanStorage();
+                    mouseReleased = false; 
+                }
+                break;
+            
+            case"bezier curve":
+
+                if(mouseDragging) {
+                                            
+                    g.setColor(strokeColor);
+                    g.drawLine(clickX, clickY, dragX, dragY);
+                    
+                }
+
+                if(mouseReleased && stack != null) {
+                    mouseDragging = false;
+                    BezierCurve bezierCurve = new BezierCurve(strokeColor, strokeSize);
+                    if(clickCounter >= 1) {
+                        //System.out.println("pewStart "+startPoint.x+" "+startPoint.y);
+                       // System.out.println("pewEnd "+endPoint.x+" "+endPoint.y);
+                        bezierCurve.setInitialCordinates(startPoint, endPoint);                   
+                        //bezierCurve.draw(g);
+                    }
+                    if(clickCounter >= 2) {                      
+                        //System.out.println("control: "+controlPoint.x+" "+controlPoint.y+" "+clickCounter);
+                        bezierCurve.getControlPoints(controlPoint1, 2);
+                        //bezierCurve.draw(g);
+                    }
+                    if(clickCounter == 3) {                        
+                        bezierCurve.getControlPoints(controlPoint2, clickCounter);                                        
+                        if(stack != null) stack.push(bezierCurve);
+                        clickCounter = 0;                  
+                      }
+                             
+                    mouseReleased = false;
+                }
+                break;
+                
+                
+
+
 
             }
        }
@@ -420,10 +514,29 @@ public class ShapesBar extends Toolbar {
         for (int i = 0; i < shapeButtons.size(); i++) {
             if(shapeButtons.get(i).IsClicked(x, y)) {
                 shapeButtons.get(i).getListener().click(x, y);
+                shapeSelected = true;
                 for(int j = 0; j < shapeButtons.size(); j++) {
                     if(j != i) shapeButtons.get(j).SetPressed(false);
                 }            
             } 
+        }
+
+        if(smallStroke.IsClicked(x, y)) {
+            strokeSize = 10;
+            mediumStroke.SetPressed(false);
+            largeStroke.SetPressed(false);
+        }
+
+        if(mediumStroke.IsClicked(x, y)) {
+            strokeSize = 15;
+            smallStroke.SetPressed(false);
+            largeStroke.SetPressed(false);
+        }
+
+        if(largeStroke.IsClicked(x, y)) {
+            strokeSize = 25;
+            smallStroke.SetPressed(false);
+            mediumStroke.SetPressed(false);
         }
 
     }
@@ -431,7 +544,29 @@ public class ShapesBar extends Toolbar {
     @Override
     public void onPress(int x, int y) {
 
-        if(canvasClicked(x, y) && isDraw()) {         
+        
+        if(canvasClicked(x, y) && isDraw()) {
+            if(drawingState.equals("bezier curve")) {
+                clickCounter++;
+                if(clickCounter == 1) {
+                    System.out.println("press "+x+" "+y+" "+clickCounter);
+                    startPoint.x = x;
+                    startPoint.y = y;                    
+                }
+                if(clickCounter == 2) {
+                    System.out.println("press "+x+" "+y+" "+clickCounter);
+                    controlPoint1.x = x;
+                    controlPoint1.y = y;
+                }
+                if(clickCounter == 3) {
+                    System.out.println("press "+x+" "+y+" "+clickCounter);
+                    controlPoint2.x = x;
+                    controlPoint2.y = y;
+                    
+                    
+                }
+                             
+            }         
             clickX = x;
             clickY = y;
             mouseReleased = false;
@@ -443,6 +578,13 @@ public class ShapesBar extends Toolbar {
     public void onRelease(int x, int y) {
 
         if(canvasClicked(x, y) && isDraw()) {
+            if(drawingState.equals("bezier curve")) {
+                System.out.println("release "+x+" "+y);
+                if(clickCounter == 1) {
+                    endPoint.x = x;
+                    endPoint.y = y;
+                }
+            }
             mouseReleased = true;
             mouseClicked = false;
         }
@@ -461,6 +603,9 @@ public class ShapesBar extends Toolbar {
         mouseDragging = true;
         dragX = x;
         dragY = y;
+        if(drawingState.equals("free drawing"))
+        clickStorage.addPoints(dragX, dragY);
+        //System.out.println("onDrag: "+dragX+" "+dragY);
         }
         
     }
@@ -472,7 +617,7 @@ public class ShapesBar extends Toolbar {
    
 
     public boolean canvasClicked(int x, int y) {
-        if(x > CanvasDimensions.x && x < CanvasDimensions.x + CanvasDimensions.width && y > CanvasDimensions.y && y < CanvasDimensions.y + CanvasDimensions.height) {
+        if(x > Dimensions.canvas_x && x < Dimensions.canvas_x + Dimensions.canvas_width && y > Dimensions.canvas_y && y < Dimensions.canvas_y + Dimensions.canvas_height) {
             return true;
         }
         else return false;
@@ -495,7 +640,7 @@ public class ShapesBar extends Toolbar {
     }
 
     private boolean isDraw() {
-        if(!openFolderState && !gradientWindowState)
+        if(!openFolderState && !gradientWindowState && shapeSelected)
         return true;
         else return false;
     }
@@ -506,6 +651,10 @@ public class ShapesBar extends Toolbar {
         for (ToggleButton b : shapeButtons) {
             b.setToolTipState(x, y);
         }
+
+        smallStroke.setToolTipState(x, y);
+        mediumStroke.setToolTipState(x, y);
+        largeStroke.setToolTipState(x, y);
 
     }
 

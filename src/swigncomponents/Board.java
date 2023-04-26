@@ -13,13 +13,14 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
+import ToolBars.Dimensions;
 import Windows.MainWindow;
 
 public class Board extends JPanel
         implements ActionListener , MouseInputListener{
 
-    private final int B_WIDTH = 1500;
-    private final int B_HEIGHT = 800;
+    private final int B_WIDTH = Dimensions.mainWindow_width;
+    private final int B_HEIGHT = Dimensions.MainWindow_height;
 
     private final int DELAY = 10;
     private Timer timer;
@@ -85,6 +86,8 @@ public class Board extends JPanel
 	@Override
 	public void mouseClicked(MouseEvent e) {
         myWindow.onClick(e.getX(), e.getY());
+
+        System.out.println(e.getX()+" "+e.getY());
 	}
 
 
@@ -127,6 +130,7 @@ public class Board extends JPanel
         mouseReleased = false;
         myWindow.onDrag(e.getX(), e.getY());
         myWindow.onClickDrag(e.getX(), e.getY(), getGraphics());
+        //System.out.println("board: "+e.getX()+" "+e.getY());
         
 
 	}

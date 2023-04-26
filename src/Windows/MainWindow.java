@@ -4,8 +4,6 @@ import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import javax.print.attribute.standard.Media;
-
 import ToolBars.*;
 
 public class MainWindow extends MyWindow {
@@ -23,10 +21,9 @@ public class MainWindow extends MyWindow {
         this.height = height;
         this.width = width;
 
-
-        shapesBar = new ShapesBar();
         layersBar = new LayerBar();
         colorBar = new ColorBar();
+        shapesBar = new ShapesBar();
         menuBar = new MenuBar();
     
     }
@@ -46,9 +43,9 @@ public class MainWindow extends MyWindow {
         layersBar.drawCurrentLayerShapes(g2D);
         shapesBar.drawDragShapes(g);
         layersBar.draw(g);
-        shapesBar.draw(g);
         g2D.setStroke(new BasicStroke(1));
         colorBar.draw(g);
+        shapesBar.draw(g);
         menuBar.draw(g);       
     }
 
@@ -93,6 +90,7 @@ public class MainWindow extends MyWindow {
         menuBar.onMove(x, y);
         shapesBar.onMove(x, y);
         colorBar.onMove(x, y);
+        layersBar.onMove(x, y);
     }
 
 

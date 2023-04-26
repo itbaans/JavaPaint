@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 
+import ToolBars.Dimensions;
+
 public class ToolTip {
 
     
@@ -29,10 +31,23 @@ public class ToolTip {
 
     public void drawToolTip(Graphics g, String data, int x, int y, int width, int height) {
         
+        int cellX = 0;
+        int cellY = 0;
+        FontMetrics m; 
         g.setColor(color);
-        int cellX = x+width;
-        int cellY = y+height;
-        FontMetrics m = g.getFontMetrics();
+        if(x+width < Dimensions.canvas_width && !(y+height > Dimensions.canvas_height)) {
+            cellX = x+width;
+            cellY = y+height;
+        }
+        else if(y+height > Dimensions.canvas_height) {
+            cellX = x+width;
+            cellY = y-height; 
+        }
+        else {
+            cellX = x-width;
+            cellY = y+height;
+        }
+        m = g.getFontMetrics();
       
         //System.out.println(x+" "+(x+width));
 		int textWidth = m.stringWidth(data);      

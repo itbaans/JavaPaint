@@ -33,6 +33,10 @@ public class LayerBar extends Toolbar {
         y = 60;
         layers.append();
         color = new Color(223, 238, 221);
+        add.setToolTipContent("add new layer");
+        remove.setToolTipContent("remove selected layer");
+        uP.setToolTipContent("swap with above");
+        down.setToolTipContent("swap with below");
 
     }
 
@@ -46,6 +50,10 @@ public class LayerBar extends Toolbar {
         uP.drawButtonImage(g, null);
         down.drawButtonImage(g, null);
         layers.drawData(g);
+        if(add.getToolTipState()) add.drawToolTip(g);
+        if(remove.getToolTipState()) remove.drawToolTip(g);
+        if(uP.getToolTipState()) uP.drawToolTip(g);
+        if(down.getToolTipState()) down.drawToolTip(g);
     }
 
     public void drawCurrentLayerShapes(Graphics2D g) {
@@ -109,8 +117,10 @@ public class LayerBar extends Toolbar {
 
     @Override
     public void onMove(int x, int y) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onMove'");
+        add.setToolTipState(x, y);
+        remove.setToolTipState(x, y);
+        uP.setToolTipState(x, y);
+        down.setToolTipState(x, y);
     }
 
 

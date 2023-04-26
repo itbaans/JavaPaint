@@ -69,7 +69,7 @@ public class LayersEngine {
         //System.out.println(node.index);
 
         if(node.up == null) return;
-        Node temp = node.up;       
+        Node temp = node.up;  
 
         int tempY = node.button.y;
         node.button.y = temp.button.y;
