@@ -480,24 +480,42 @@ public class ShapesBar extends Toolbar {
                         //System.out.println("pewStart "+startPoint.x+" "+startPoint.y);
                        // System.out.println("pewEnd "+endPoint.x+" "+endPoint.y);
                         bezierCurve.setInitialCordinates(startPoint, endPoint);                   
-                        //bezierCurve.draw(g);
+                        if(clickCounter == 1) bezierCurve.draw(g);
                     }
                     if(clickCounter >= 2) {                      
                         //System.out.println("control: "+controlPoint.x+" "+controlPoint.y+" "+clickCounter);
                         bezierCurve.getControlPoints(controlPoint1, 2);
-                        //bezierCurve.draw(g);
+                        if(clickCounter == 2) bezierCurve.draw(g);
                     }
                     if(clickCounter == 3) {                        
-                        bezierCurve.getControlPoints(controlPoint2, clickCounter);                                        
+                        bezierCurve.getControlPoints(controlPoint2, clickCounter);                               
                         if(stack != null) stack.push(bezierCurve);
-                        clickCounter = 0;                  
-                      }
-                             
-                    mouseReleased = false;
+                        clickCounter = 0;
+                        mouseReleased = false;                  
+                      }                                             
                 }
                 break;
+
+            case"rectangle": 
+
+                if(mouseDragging) {
+
+                    g.setColor(strokeColor);
+                    g.drawRect(clickX, clickY, dragX-clickX, dragY-clickY);
+                    g.setColor(Color.white);
+                    g.fillRect(clickX, clickY, dragX-clickX, dragY-clickY);
+
+                }
+
+                if(mouseReleased && stack != null) {
+
+                    mouseDragging = false;
+                    Rectangle rectangle = new Rectangle(clickX, clickY, dragY-clickY, dragX-clickX, strokeColor, fillColor, strokeSize);
+                    if(stack != null) stack.push(rectangle);
+                    mouseReleased = false;
+                }
                 
-                
+              
 
 
 
@@ -552,19 +570,7 @@ public class ShapesBar extends Toolbar {
                     System.out.println("press "+x+" "+y+" "+clickCounter);
                     startPoint.x = x;
                     startPoint.y = y;                    
-                }
-                if(clickCounter == 2) {
-                    System.out.println("press "+x+" "+y+" "+clickCounter);
-                    controlPoint1.x = x;
-                    controlPoint1.y = y;
-                }
-                if(clickCounter == 3) {
-                    System.out.println("press "+x+" "+y+" "+clickCounter);
-                    controlPoint2.x = x;
-                    controlPoint2.y = y;
-                    
-                    
-                }
+                }               
                              
             }         
             clickX = x;
@@ -579,10 +585,20 @@ public class ShapesBar extends Toolbar {
 
         if(canvasClicked(x, y) && isDraw()) {
             if(drawingState.equals("bezier curve")) {
-                System.out.println("release "+x+" "+y);
+                //System.out.println("release "+x+" "+y);
                 if(clickCounter == 1) {
                     endPoint.x = x;
                     endPoint.y = y;
+                }
+                if(clickCounter == 2) {
+                    //System.out.println("relsease "+x+" "+y+" "+clickCounter);
+                    controlPoint1.x = x;
+                    controlPoint1.y = y;
+                }
+                if(clickCounter == 3) {
+                    //System.out.println("rlesae "+x+" "+y+" "+clickCounter);
+                    controlPoint2.x = x;
+                    controlPoint2.y = y;                                  
                 }
             }
             mouseReleased = true;
@@ -606,6 +622,18 @@ public class ShapesBar extends Toolbar {
         if(drawingState.equals("free drawing"))
         clickStorage.addPoints(dragX, dragY);
         //System.out.println("onDrag: "+dragX+" "+dragY);
+        if(drawingState.equals("bezier curve")) {
+            if(clickCounter == 2) {
+                //System.out.println("relsease "+x+" "+y+" "+clickCounter);
+                controlPoint1.x = x;
+                controlPoint1.y = y;
+            }
+            if(clickCounter == 3) {
+                //System.out.println("rlesae "+x+" "+y+" "+clickCounter);
+                controlPoint2.x = x;
+                controlPoint2.y = y;                                  
+            }
+        }
         }
         
     }
