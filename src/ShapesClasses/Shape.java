@@ -2,8 +2,9 @@ package ShapesClasses;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
-public abstract class Shape {
+public abstract class Shape implements Serializable {
 
     protected int x;
     protected int y;

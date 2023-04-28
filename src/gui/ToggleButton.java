@@ -8,12 +8,13 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.awt.Graphics;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.image.ImageObserver;
 
-public class ToggleButton extends Button {
+public class ToggleButton extends Button implements Serializable {
     
     public int x;
 	public int y;

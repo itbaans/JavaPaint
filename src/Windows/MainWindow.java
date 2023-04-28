@@ -36,8 +36,10 @@ public class MainWindow extends MyWindow {
         
         shapesBar.giveStack(layersBar.getStack());
         menuBar.setUndoRedo(layersBar.getStack(), layersBar.getUndoRedoStack());
+        menuBar.setOutLayers(layersBar.getLayers());
         shapesBar.setColorBarStates(colorBar.getStrokeColor(), colorBar.getFillColor(), colorBar.getstrokeClicked(), colorBar.getfillClicked(), colorBar.getWindowState());
-        shapesBar.menuBarStates(menuBar.getOpenWindowState());  
+        shapesBar.menuBarStates(menuBar.getOpenWindowState());
+        if(menuBar.getReadLayers() != null) layersBar.readSavedLayers(menuBar.getReadLayers());
 
         Graphics2D g2D = (Graphics2D) g;
         layersBar.drawCurrentLayerShapes(g2D);

@@ -1,30 +1,27 @@
 package ToolBars;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import LayerEngineRecources.LayersEngine;
+
 public class FileWriting {
     
-    public FileWriting() {
+    public FileWriting(LayersEngine layers) {
 
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss_a").format(new Date());
-        String fileName = "file_" + timeStamp + ".txt";
-        String fileContent = "This is the content of the file.";
+        String fileName = "file_" + timeStamp + ".ser";       
 
         try {
 
-            File myObj = new File("src\\savedFiles\\"+fileName);
-            if (myObj.createNewFile()) {
-              System.out.println("File created: " + myObj.getName());
-            } 
-            else {
-              System.out.println("File already exists.");
-            } 
-            FileWriter fileWriter = new FileWriter(myObj);
-            fileWriter.write(fileContent);
-            fileWriter.close();
+            FileOutputStream fileOut = new FileOutputStream("src\\savedFiles\\"+fileName);           
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(layers);
+            objectOut.close();
             System.out.println("File saved successfully with name: " + fileName);
         }
          catch (IOException e) {
