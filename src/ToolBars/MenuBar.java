@@ -1,6 +1,8 @@
 package ToolBars;
 import java.awt.Color;
 import java.awt.Graphics;
+
+import LayerEngineRecources.LayersEngine;
 import gui.*;
 import Windows.*;
 import stackNqueueRecources.*;
@@ -16,7 +18,10 @@ public class MenuBar extends Toolbar {
     private DropDownButton editMenu;
     ActiveButton undoButton;
     ActiveButton redoButton;
-    private String undoRedoState = "";  
+    private String undoRedoState = "";
+    private LayersEngine outlayers;
+    //private LayersEngine readLayers;
+    FileWriting fWrite;
 
     private OpenWindow openWindow;
 
@@ -41,6 +46,7 @@ public class MenuBar extends Toolbar {
             public void click(int x, int y) {
                 System.out.println("Open clicked");
                 openWindow = new OpenWindow(397, 100, 500, 600);
+                 
             }
         });
         openButton.setToolTipContent("Open saved files (Ctrl + O)");
@@ -51,7 +57,8 @@ public class MenuBar extends Toolbar {
             @Override
             public void click(int x, int y) {
                 System.out.println("save clicked");
-                FileWriting fW = new FileWriting();
+                if(outlayers != null)
+                fWrite = new FileWriting(outlayers);
             }
         });
         fileMenu.addComponents(saveButton);
@@ -230,6 +237,16 @@ public class MenuBar extends Toolbar {
 
     public boolean getOpenWindowState() {
         return openWindowState;
+    }
+
+    public void setOutLayers(LayersEngine layers) {
+        this.outlayers = layers;
+    }
+
+    public LayersEngine getReadLayers() {
+        if(openWindow != null)
+        return openWindow.getReadLayers();
+        else return null;
     }
 
 

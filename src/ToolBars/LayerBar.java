@@ -123,6 +123,14 @@ public class LayerBar extends Toolbar {
         down.setToolTipState(x, y);
     }
 
+    public LayersEngine getLayers() {
+        return layers;
+    }
+
+    public void readSavedLayers(LayersEngine readLayers) {
+        layers = readLayers;
+    }
+
 
 
 

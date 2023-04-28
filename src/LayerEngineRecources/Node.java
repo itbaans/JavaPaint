@@ -1,9 +1,11 @@
 package LayerEngineRecources;
 
+import java.io.Serializable;
+
 import gui.*;
 import stackNqueueRecources.*;
 
-public class Node {
+public class Node implements Serializable {
 
     LayerButton button;
     Stack stack;

@@ -3,12 +3,13 @@ package LayerEngineRecources;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import gui.LayerButton;
 import stackNqueueRecources.*;
 
-public class LayersEngine {
+public class LayersEngine implements Serializable {
     
     private Node head;
     private int count = 0;

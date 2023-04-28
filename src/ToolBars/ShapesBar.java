@@ -479,8 +479,9 @@ public class ShapesBar extends Toolbar {
 
                 if(mouseDragging) {
 
-                    g.setColor(strokeColor);
+                    g.setColor(strokeColor);                    
                     g.drawRect(clickX, clickY, dragX-clickX, dragY-clickY);
+                    
                     g.setColor(Color.white);
                     g.fillRect(clickX, clickY, dragX-clickX, dragY-clickY);
 

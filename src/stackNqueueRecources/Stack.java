@@ -1,11 +1,12 @@
 package stackNqueueRecources;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import ShapesClasses.*;
 
-public class Stack {
+public class Stack implements Serializable {
 
     ShapeNode head;
 

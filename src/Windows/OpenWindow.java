@@ -2,7 +2,12 @@ package Windows;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+
+import LayerEngineRecources.LayersEngine;
 import gui.*;
 
 public class OpenWindow extends MyWindow {
@@ -10,6 +15,7 @@ public class OpenWindow extends MyWindow {
     ArrayList <ToggleColorButton> buttons = new ArrayList<>();
     private boolean windowClose;
     private int count = 0;
+    private LayersEngine serializedLayers;
     
     public OpenWindow(int x, int y, int height, int width ) {
 
@@ -32,7 +38,7 @@ public class OpenWindow extends MyWindow {
             for(File file: files) {
 
                 //adding the file path name as string the buttons
-                if(file.isFile() && file.getName().endsWith(".txt")) {
+                if(file.isFile() && file.getName().endsWith(".ser")) {
                    buttons.add(new ToggleColorButton(file.getName(), x, tempY , buttonHeight, width, Color.white));
                 }
                 tempY += buttonHeight;
@@ -71,6 +77,22 @@ public class OpenWindow extends MyWindow {
         if(!windowClose) {        
             for (int i = 0; i < buttons.size(); i++) {
                 if(buttons.get(i).IsClicked(x, y)) {
+                    System.out.println(buttons.get(i).getTitle());
+                    try {
+                        FileInputStream fileIn = new FileInputStream("src\\savedFiles\\"+buttons.get(i).getTitle());
+                        ObjectInputStream in = new ObjectInputStream(fileIn);
+                        serializedLayers = (LayersEngine) in.readObject();
+                        in.close();
+                        fileIn.close();              
+                    }
+                     catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                     catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    windowClose = true;
+
                     for(int j = 0; j < buttons.size(); j++) {
                         if(j != i) buttons.get(j).SetPressed(false);
                     }            
@@ -80,6 +102,10 @@ public class OpenWindow extends MyWindow {
 
         if(tBar.closeButton.IsClicked(x, y)) windowClose = true;
 
+    }
+
+    public LayersEngine getReadLayers() {
+        return serializedLayers;
     }
 
     public boolean getWindowClose() {
