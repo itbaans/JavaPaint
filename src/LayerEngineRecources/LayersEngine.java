@@ -35,8 +35,8 @@ public class LayersEngine {
             LayerButton newButton = new LayerButton("Layer: "+count, x, y-=height, height, width, Color.WHITE);
             if(count==0) newButton.SetPressed(true);
             Stack stack = new Stack();
-            Queue queue = new Queue();
-            Node temp = new Node(newButton, count, stack, queue);
+            Stack undoRedo = new Stack();
+            Node temp = new Node(newButton, count, stack, undoRedo);
             if ( head == null ) {         
                 head = temp;
                 //System.out.println(length());
@@ -84,9 +84,9 @@ public class LayersEngine {
         node.stack = temp.stack;
         temp.stack = tempStack;
 
-        Queue tempQ = node.queue;
-        node.queue = temp.queue;
-        temp.queue = tempQ;
+        Stack tempQ = node.undoRedo;
+        node.undoRedo = temp.undoRedo;
+        temp.undoRedo = tempQ;
                
         reIndexing();
 
@@ -111,9 +111,9 @@ public class LayersEngine {
         node.stack = temp.stack;
         temp.stack = tempStack;
 
-        Queue tempQ = node.queue;
-        node.queue = temp.queue;
-        temp.queue = tempQ;
+        Stack tempQ = node.undoRedo;
+        node.undoRedo = temp.undoRedo;
+        temp.undoRedo = tempQ;
         
         reIndexing();
         
@@ -290,9 +290,9 @@ public class LayersEngine {
         else return null;
     }
 
-    public Queue getQ() {
+    public Stack getUndoRedo() {
         Node node = clickedNode();
-        if(node != null) return node.queue;
+        if(node != null) return node.undoRedo;
         else return null;
     }
 

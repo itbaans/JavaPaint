@@ -130,17 +130,17 @@ public class MenuBar extends Toolbar {
 
     }
 
-    public void setUndoRedo(Stack stack, Queue queue) {
+    public void setUndoRedo(Stack stack, Stack undoredo) {
 
         switch(undoRedoState) {
             case"undo":
             if(stack.stackSize()!=0)
-            queue.enqueue(stack.pop());
+            undoredo.push(stack.pop());
             undoRedoState = "";
             break;
             case"redo":
-            if(queue.size() != 0)        
-            stack.push(queue.dequeue());
+            if(undoredo.stackSize() != 0)        
+            stack.push(undoredo.pop());
             undoRedoState = "";
             break;
         }

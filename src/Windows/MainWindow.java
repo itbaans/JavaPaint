@@ -35,7 +35,7 @@ public class MainWindow extends MyWindow {
     
         
         shapesBar.giveStack(layersBar.getStack());
-        menuBar.setUndoRedo(layersBar.getStack(), layersBar.getQueue());
+        menuBar.setUndoRedo(layersBar.getStack(), layersBar.getUndoRedoStack());
         shapesBar.setColorBarStates(colorBar.getStrokeColor(), colorBar.getFillColor(), colorBar.getstrokeClicked(), colorBar.getfillClicked(), colorBar.getWindowState());
         shapesBar.menuBarStates(menuBar.getOpenWindowState());  
 

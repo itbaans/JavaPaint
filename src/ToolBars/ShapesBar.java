@@ -36,11 +36,13 @@ public class ShapesBar extends Toolbar {
     private boolean mouseClicked;
     private int strokeSize;
     private ClickStorage clickStorage = new ClickStorage();
+
     private Point startPoint = new Point();
     private Point endPoint = new Point();
-    private Point controlPoint1 = new Point();
-    private Point controlPoint2 = new Point();
+    private Point controlPoint = new Point();
     private int clickCounter = 0;
+    private BezierCurve bezierCurve;
+
     
 
 
@@ -51,7 +53,7 @@ public class ShapesBar extends Toolbar {
         this.width = 150;
         this.height = 800;
         color = new Color(223, 238, 221);
-        strokeSize = 10;
+        strokeSize = 10;    
         intiializeButtons();
 
     }
@@ -465,35 +467,12 @@ public class ShapesBar extends Toolbar {
                 break;
             
             case"bezier curve":
-
-                if(mouseDragging) {
-                                            
-                    g.setColor(strokeColor);
-                    g.drawLine(clickX, clickY, dragX, dragY);
+                                
+                if(bezierCurve != null) {
                     
+                    if(clickCounter != 0) bezierCurve.draw(g);
                 }
-
-                if(mouseReleased && stack != null) {
-                    mouseDragging = false;
-                    BezierCurve bezierCurve = new BezierCurve(strokeColor, strokeSize);
-                    if(clickCounter >= 1) {
-                        //System.out.println("pewStart "+startPoint.x+" "+startPoint.y);
-                       // System.out.println("pewEnd "+endPoint.x+" "+endPoint.y);
-                        bezierCurve.setInitialCordinates(startPoint, endPoint);                   
-                        if(clickCounter == 1) bezierCurve.draw(g);
-                    }
-                    if(clickCounter >= 2) {                      
-                        //System.out.println("control: "+controlPoint.x+" "+controlPoint.y+" "+clickCounter);
-                        bezierCurve.getControlPoints(controlPoint1, 2);
-                        if(clickCounter == 2) bezierCurve.draw(g);
-                    }
-                    if(clickCounter == 3) {                        
-                        bezierCurve.getControlPoints(controlPoint2, clickCounter);                               
-                        if(stack != null) stack.push(bezierCurve);
-                        clickCounter = 0;
-                        mouseReleased = false;                  
-                      }                                             
-                }
+             
                 break;
 
             case"rectangle": 
@@ -515,9 +494,6 @@ public class ShapesBar extends Toolbar {
                     mouseReleased = false;
                 }
                 
-              
-
-
 
             }
        }
@@ -564,18 +540,21 @@ public class ShapesBar extends Toolbar {
 
         
         if(canvasClicked(x, y) && isDraw()) {
+                              
             if(drawingState.equals("bezier curve")) {
                 clickCounter++;
                 if(clickCounter == 1) {
-                    System.out.println("press "+x+" "+y+" "+clickCounter);
                     startPoint.x = x;
-                    startPoint.y = y;                    
-                }               
-                             
-            }         
-            clickX = x;
-            clickY = y;
-            mouseReleased = false;
+                    startPoint.y = y;
+                }
+            }
+
+            else {
+                clickX = x;
+                clickY = y;
+                mouseReleased = false;
+            }
+            
         }
         
     }
@@ -584,25 +563,33 @@ public class ShapesBar extends Toolbar {
     public void onRelease(int x, int y) {
 
         if(canvasClicked(x, y) && isDraw()) {
+                       
             if(drawingState.equals("bezier curve")) {
-                //System.out.println("release "+x+" "+y);
                 if(clickCounter == 1) {
                     endPoint.x = x;
                     endPoint.y = y;
+                    bezierCurve = new BezierCurve(strokeColor, strokeSize);
                 }
+                               
+                bezierCurve.setInitialCordinates(startPoint, endPoint);        
                 if(clickCounter == 2) {
-                    //System.out.println("relsease "+x+" "+y+" "+clickCounter);
-                    controlPoint1.x = x;
-                    controlPoint1.y = y;
+                    controlPoint.x = x;
+                    controlPoint.y = y;
+                    bezierCurve.getControlPoints(controlPoint, clickCounter);
                 }
                 if(clickCounter == 3) {
-                    //System.out.println("rlesae "+x+" "+y+" "+clickCounter);
-                    controlPoint2.x = x;
-                    controlPoint2.y = y;                                  
+                    controlPoint.x = x;
+                    controlPoint.y = y;
+                    bezierCurve.getControlPoints(controlPoint, clickCounter);
+                    stack.push(bezierCurve);
+                    clickCounter = 0;
                 }
             }
-            mouseReleased = true;
-            mouseClicked = false;
+
+            else {
+                mouseReleased = true;
+                mouseClicked = false;
+            }
         }
         
     }
@@ -615,25 +602,34 @@ public class ShapesBar extends Toolbar {
 
     @Override
     public void onDrag(int x, int y) {
-        if(canvasClicked(x, y) && isDraw()) {
-        mouseDragging = true;
-        dragX = x;
-        dragY = y;
-        if(drawingState.equals("free drawing"))
-        clickStorage.addPoints(dragX, dragY);
-        //System.out.println("onDrag: "+dragX+" "+dragY);
-        if(drawingState.equals("bezier curve")) {
-            if(clickCounter == 2) {
-                //System.out.println("relsease "+x+" "+y+" "+clickCounter);
-                controlPoint1.x = x;
-                controlPoint1.y = y;
+        if(canvasClicked(x, y) && isDraw()) {            
+            if(drawingState.equals("bezier curve")) {
+                if(clickCounter == 1) {
+                    endPoint.x = x;
+                    endPoint.y = y;
+                    bezierCurve = new BezierCurve(strokeColor, strokeSize);
+                }
+                bezierCurve.setInitialCordinates(startPoint, endPoint);
+                if(clickCounter == 2) {
+                    controlPoint.x = x;
+                    controlPoint.y = y;
+                    bezierCurve.getControlPoints(controlPoint, clickCounter);
+                }
+                if(clickCounter == 3) {
+                    controlPoint.x = x;
+                    controlPoint.y = y;
+                    bezierCurve.getControlPoints(controlPoint, clickCounter);
+                }
             }
-            if(clickCounter == 3) {
-                //System.out.println("rlesae "+x+" "+y+" "+clickCounter);
-                controlPoint2.x = x;
-                controlPoint2.y = y;                                  
+            
+            //System.out.println("onDrag: "+dragX+" "+dragY);
+            else {
+                if(drawingState.equals("free drawing")) clickStorage.addPoints(dragX, dragY);              
+                mouseDragging = true;
+                dragX = x;
+                dragY = y;
             }
-        }
+        
         }
         
     }

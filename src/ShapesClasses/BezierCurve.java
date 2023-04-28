@@ -8,10 +8,11 @@ import java.awt.Point;
 
 public class BezierCurve extends Shape {
 
-    private Point p0 = new Point();
+    private Point p0;
     private Point p1;
     private Point p2;
-    private Point p3 = new Point();
+    private Point p3;
+    private boolean drawingState;
     
 
     public BezierCurve() {
@@ -25,10 +26,16 @@ public class BezierCurve extends Shape {
 
 
     public void setInitialCordinates(Point p0, Point p3) {
-        this.p0.x = p0.x;
-        this.p3.x = p3.x;
-        this.p0.y = p0.y;
-        this.p3.y = p3.y;
+
+        this.p0 = new Point(p0.x, p0.y);
+        this.p3 = new Point(p3.x, p3.y);      
+        drawingState = true;
+
+    }
+    public void setInitialCordinate2(int x1, int y1, int x2, int y2) {
+        this.p0 = new Point(x1, y1);
+        this.p3 = new Point(x2, y2);
+        drawingState = true;
     }
 
     public void setStuff(Color strokeColor, float strokeSize) {
@@ -37,22 +44,27 @@ public class BezierCurve extends Shape {
     }
 
     public void draw(Graphics g) {
+
         
-        if(p1 == null && p2 == null) {
-            //System.out.println(p0.x+" "+p3.x);
-                linearBezier(g);
-            }
-    
-            else if(p1 != null && p2 == null) {
+
+            if(p0 != null && p3 != null && p1 == null && p2 == null) {
                 //System.out.println(p0.x+" "+p3.x);
-                quadraticBezier(g);
-            }
-            
-    
-            else if(p1 != null && p2 != null) {
-                //System.out.println("cubic");
-                cubicBezier(g);
-            }
+                    linearBezier(g);
+                }
+        
+                else if(p1 != null && p2 == null) {
+                    //System.out.println(p0.x+" "+p3.x);
+                    quadraticBezier(g);
+                }
+                
+        
+                else if(p1 != null && p2 != null) {
+                    //System.out.println("cubic");
+                    cubicBezier(g);                    
+                }
+        
+        
+        
         
     }
 

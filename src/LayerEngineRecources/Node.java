@@ -7,20 +7,20 @@ public class Node {
 
     LayerButton button;
     Stack stack;
-    Queue queue;
+    Stack undoRedo;
     int index;
     Node up;
     Node down;
     
 
-    public Node(LayerButton button, int index, Stack stack, Queue queue) {
+    public Node(LayerButton button, int index, Stack stack, Stack undoRedo) {
 
         this.button = button;
         this.index = index;
         this.up = null;
         this.down = null;
         this.stack = stack;
-        this.queue = queue;
+        this.undoRedo = undoRedo;
 
     }
 }

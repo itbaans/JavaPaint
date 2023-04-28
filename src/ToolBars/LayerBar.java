@@ -75,8 +75,8 @@ public class LayerBar extends Toolbar {
         return layers.getStack();
     }
 
-    public Queue getQueue() {
-        return layers.getQ();
+    public Stack getUndoRedoStack() {
+        return layers.getUndoRedo();
     }
 
     @Override
