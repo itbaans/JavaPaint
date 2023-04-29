@@ -3,6 +3,7 @@ package Windows;
 import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import gui.GridButton;
 
 import ToolBars.*;
 
@@ -12,6 +13,8 @@ public class MainWindow extends MyWindow {
     private LayerBar layersBar;
     private ColorBar colorBar;
     private MenuBar menuBar;
+    private GridButton gridButton;
+    private int clickCounter = 0;
     
 
     public MainWindow(int height, int width) {
@@ -21,10 +24,13 @@ public class MainWindow extends MyWindow {
         this.height = height;
         this.width = width;
 
-        layersBar = new LayerBar();
-        colorBar = new ColorBar();
+        layersBar = new LayerBar();        
         shapesBar = new ShapesBar();
+        gridButton = new GridButton(1165, 715, 64, 64);
+        colorBar = new ColorBar();
         menuBar = new MenuBar();
+        
+        
     
     }
 
@@ -47,8 +53,10 @@ public class MainWindow extends MyWindow {
         layersBar.draw(g);
         g2D.setStroke(new BasicStroke(1));
         colorBar.draw(g);
-        shapesBar.draw(g);
-        menuBar.draw(g);       
+        shapesBar.draw(g);         
+        gridButton.draw(g, clickCounter);
+        if(gridButton.getToolTipState()) gridButton.drawToolTip(g);
+        menuBar.draw(g);
     }
 
     @Override
@@ -57,11 +65,15 @@ public class MainWindow extends MyWindow {
         shapesBar.onClick(x, y);
         layersBar.onClick(x, y);
         menuBar.onClick(x, y);
+        gridButton.getClicks(x, y);
+        clickCounter++;
+        if(clickCounter==7) clickCounter = 0;
 
     }
 
     @Override
-    public void onPress(int x, int y) {
+    public void onPress(int x, int y) {    
+
         shapesBar.onPress(x, y);
         layersBar.onPress(x, y);
         colorBar.onPress(x, y);
@@ -93,6 +105,7 @@ public class MainWindow extends MyWindow {
         shapesBar.onMove(x, y);
         colorBar.onMove(x, y);
         layersBar.onMove(x, y);
+        gridButton.setToolTipState(x, y);
     }
 
 

@@ -178,6 +178,16 @@ public class LayersEngine implements Serializable {
 
     }
 
+    public void refreshList() {
+
+        while(head.down != null) {
+            head = head.down;
+        }
+
+        head.stack.clearStack();
+        head.undoRedo.clearStack();
+    }
+
 
     private void reIndexing() {
 
@@ -303,7 +313,7 @@ public class LayersEngine implements Serializable {
         ArrayList<Stack> data = new ArrayList<>();
         while(temp!=null) {
             if(temp.stack != null)
-            data.add(temp.stack);
+            data.add(temp.stack);           
             temp = temp.down;
         }
 

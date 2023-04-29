@@ -14,7 +14,7 @@ import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
 import ToolBars.Dimensions;
-import Windows.MainWindow;
+import Windows.*;
 
 public class Board extends JPanel
         implements ActionListener , MouseInputListener{
@@ -31,6 +31,8 @@ public class Board extends JPanel
     private boolean mouseDragging;
     private boolean mouseReleased;
     private MainWindow myWindow;
+
+    
     
 
     
@@ -55,6 +57,7 @@ public class Board extends JPanel
     private void InitializeAssets() {
         
         myWindow = new MainWindow(B_HEIGHT, B_WIDTH);
+        
 
     }
 
@@ -79,6 +82,7 @@ public class Board extends JPanel
         super.paintComponent(g);
         
         myWindow.draw(g);
+        
         
 
     }

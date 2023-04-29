@@ -34,6 +34,7 @@ public class MenuBar extends Toolbar {
             @Override
             public void click(int x, int y) {
                 System.out.println("New clicked");
+                if(outlayers != null) outlayers.refreshList();
                 
             }
         });
