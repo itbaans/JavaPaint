@@ -23,9 +23,10 @@ public class GradientWindow extends MyWindow {
     private int B;
     private Color currentColor;
     private boolean windowClose;
+    private static GradientWindow instance = new GradientWindow();
 
 
-    public GradientWindow() {
+    private GradientWindow() {
 
         font = new Font("Arial", Font.PLAIN, 13);
         x = 416;
@@ -50,7 +51,11 @@ public class GradientWindow extends MyWindow {
 
     }
 
-    public void initializeGradient() {
+    public static GradientWindow getInstance() {
+        return instance;
+    }
+
+    private void initializeGradient() {
 
         double saturation = 0;
         double hue = 0;
@@ -135,7 +140,7 @@ public class GradientWindow extends MyWindow {
         
     }
 
-    public void initializeColors() {
+    private void initializeColors() {
 
         int x = 465;
         int y = 191;
@@ -191,7 +196,7 @@ public class GradientWindow extends MyWindow {
         }
 
         if(tBar.closeButton.IsClicked(x, y)) {
-            windowClose = true;            
+            windowClose = true;          
         } 
     }
 

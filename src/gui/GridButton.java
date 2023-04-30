@@ -4,6 +4,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
+
+import ToolBars.ColorBar;
+import Windows.GradientWindow;
 import Windows.Grid;
 
 public class GridButton extends ToggleButton {
@@ -99,9 +102,12 @@ public class GridButton extends ToggleButton {
 
         }
 
+        
         g.drawImage(currentState, x, y, null);
         grid.setType(currentType);
-        grid.drawGrid(g);
+        if(!ColorBar.getWindowState())
+            grid.drawGrid(g);
+        
 
     }
 

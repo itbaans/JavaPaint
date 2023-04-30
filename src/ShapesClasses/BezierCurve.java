@@ -11,9 +11,7 @@ public class BezierCurve extends Shape {
     private Point p0;
     private Point p1;
     private Point p2;
-    private Point p3;
-    private boolean drawingState;
-    
+    private Point p3;  
 
     public BezierCurve() {
         strokeColor = Color.black;
@@ -29,13 +27,7 @@ public class BezierCurve extends Shape {
 
         this.p0 = new Point(p0.x, p0.y);
         this.p3 = new Point(p3.x, p3.y);      
-        drawingState = true;
 
-    }
-    public void setInitialCordinate2(int x1, int y1, int x2, int y2) {
-        this.p0 = new Point(x1, y1);
-        this.p3 = new Point(x2, y2);
-        drawingState = true;
     }
 
     public void setStuff(Color strokeColor, float strokeSize) {
@@ -45,23 +37,21 @@ public class BezierCurve extends Shape {
 
     public void draw(Graphics g) {
 
+        if(p0 != null && p3 != null && p1 == null && p2 == null) {
+            //System.out.println(p0.x+" "+p3.x);
+            linearBezier(g);
+        }
         
-
-            if(p0 != null && p3 != null && p1 == null && p2 == null) {
-                //System.out.println(p0.x+" "+p3.x);
-                    linearBezier(g);
-                }
-        
-                else if(p1 != null && p2 == null) {
-                    //System.out.println(p0.x+" "+p3.x);
-                    quadraticBezier(g);
-                }
+        else if(p1 != null && p2 == null) {
+            //System.out.println(p0.x+" "+p3.x);
+            quadraticBezier(g);
+        }
                 
         
-                else if(p1 != null && p2 != null) {
-                    //System.out.println("cubic");
-                    cubicBezier(g);                    
-                }
+        else if(p1 != null && p2 != null) {
+            //System.out.println("cubic");
+            cubicBezier(g);                    
+        }
         
         
         
@@ -71,7 +61,7 @@ public class BezierCurve extends Shape {
     public void draw2D(Graphics2D g) {
         
         g.setStroke(new BasicStroke(strokeSize));
-        if(p1 == null && p2 == null) {
+        if(p0 != null && p3 != null && p1 == null && p2 == null) {
             //System.out.println("linera");
             linearBezier(g);
         }

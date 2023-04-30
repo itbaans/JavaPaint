@@ -66,7 +66,7 @@ public class MainWindow extends MyWindow {
         layersBar.onClick(x, y);
         menuBar.onClick(x, y);
         gridButton.getClicks(x, y);
-        clickCounter++;
+        if(gridButton.getToolTipState()) clickCounter++;
         if(clickCounter==7) clickCounter = 0;
 
     }
@@ -106,6 +106,10 @@ public class MainWindow extends MyWindow {
         colorBar.onMove(x, y);
         layersBar.onMove(x, y);
         gridButton.setToolTipState(x, y);
+    }
+
+    public MenuBar getMenuBar() {
+        return menuBar;
     }
 
 

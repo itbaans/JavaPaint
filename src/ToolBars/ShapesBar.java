@@ -479,18 +479,26 @@ public class ShapesBar extends Toolbar {
 
                 if(mouseDragging) {
 
+                    int width = Math.abs(dragX - clickX);
+                    int height = Math.abs(dragY - clickY);
+                    int xT = Math.min(clickX, dragX);
+                    int yT = Math.min(clickY, dragY);
                     g.setColor(strokeColor);                    
-                    g.drawRect(clickX, clickY, dragX-clickX, dragY-clickY);
-                    
+                    g.drawRect(xT, yT, width, height);               
                     g.setColor(Color.white);
-                    g.fillRect(clickX, clickY, dragX-clickX, dragY-clickY);
+                    g.fillRect(xT, yT, width, height);
+                    
 
                 }
 
                 if(mouseReleased && stack != null) {
 
                     mouseDragging = false;
-                    Rectangle rectangle = new Rectangle(clickX, clickY, dragY-clickY, dragX-clickX, strokeColor, fillColor, strokeSize);
+                    int width = Math.abs(dragX - clickX);
+                    int height = Math.abs(dragY - clickY);
+                    int xT = Math.min(clickX, dragX);
+                    int yT = Math.min(clickY, dragY);
+                    Rectangle rectangle = new Rectangle(xT, yT, height, width, strokeColor, fillColor, strokeSize);
                     if(stack != null) stack.push(rectangle);
                     mouseReleased = false;
                 }

@@ -17,7 +17,7 @@ public class ColorBar extends Toolbar {
     private ArrayList<ActiveColorButton> colorButtons = new ArrayList<>();
     private GradientWindow gW;
     private ActiveButton gWButton;
-    private boolean windowOpen;
+    private static boolean windowOpen;
     private Color strokeColor;
     private Color fillColor;
     private boolean strokeClicked;
@@ -35,7 +35,7 @@ public class ColorBar extends Toolbar {
 
         stroke_color = new ToggleColorButton("Stroke ",478, y+15, 40, 40, color.black);
         fill_color = new ToggleColorButton("fill Color", 776, 720, 40, 40, color.white);
-        gW = new GradientWindow();
+        gW = GradientWindow.getInstance();
         stroke_color.SetPressed(true);
         strokeClicked = true;
         strokeColor = stroke_color.getColor();
@@ -231,7 +231,7 @@ public class ColorBar extends Toolbar {
         return fillColor;
     }
 
-    public boolean getWindowState() {
+    public static boolean getWindowState() {
         return windowOpen;
     }
 

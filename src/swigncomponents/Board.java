@@ -10,10 +10,12 @@ import java.awt.image.ImageObserver;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
-import ToolBars.Dimensions;
+import ToolBars.*;
+import ToolBars.MenuBar;
 import Windows.*;
 
 public class Board extends JPanel
@@ -30,7 +32,7 @@ public class Board extends JPanel
     private int y2;
     private boolean mouseDragging;
     private boolean mouseReleased;
-    private MainWindow myWindow;
+    private MainWindow mainWindow;
 
     
     
@@ -46,6 +48,28 @@ public class Board extends JPanel
         @Override
         public void keyPressed(KeyEvent e) {
 
+            MenuBar bar = mainWindow.getMenuBar();
+
+            if ((e.getKeyCode() == KeyEvent.VK_N) && (e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK)) {
+                bar.getButtonFunctionality("new");
+            }
+
+            if ((e.getKeyCode() == KeyEvent.VK_S) && (e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK)) {
+                bar.getButtonFunctionality("save");
+            }
+
+            if ((e.getKeyCode() == KeyEvent.VK_O) && (e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK)) {
+                bar.getButtonFunctionality("open");
+            }
+
+            if ((e.getKeyCode() == KeyEvent.VK_Z) && (e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK)) {
+                bar.getButtonFunctionality("undo");
+            }
+
+            if ((e.getKeyCode() == KeyEvent.VK_Y) && (e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK)) {
+                bar.getButtonFunctionality("redo");
+            }
+
         }
     }
 
@@ -56,7 +80,7 @@ public class Board extends JPanel
 
     private void InitializeAssets() {
         
-        myWindow = new MainWindow(B_HEIGHT, B_WIDTH);
+        mainWindow = new MainWindow(B_HEIGHT, B_WIDTH);
         
 
     }
@@ -81,7 +105,7 @@ public class Board extends JPanel
         
         super.paintComponent(g);
         
-        myWindow.draw(g);
+        mainWindow.draw(g);
         
         
 
@@ -89,9 +113,12 @@ public class Board extends JPanel
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-        myWindow.onClick(e.getX(), e.getY());
 
-        System.out.println(e.getX()+" "+e.getY());
+        if(SwingUtilities.isLeftMouseButton(e)) {
+            mainWindow.onClick(e.getX(), e.getY());
+
+            System.out.println(e.getX()+" "+e.getY());
+        }
 	}
 
 
@@ -99,21 +126,25 @@ public class Board extends JPanel
 	@Override
 	public void mousePressed(MouseEvent e) {
         
-        myWindow.onPress(e.getX(), e.getY());
-        myWindow.onClickDraw(e.getX(), e.getY(), getGraphics());
-        x1 = e.getX();
-        y1 = e.getY();
+        if(SwingUtilities.isLeftMouseButton(e)) {
+            mainWindow.onPress(e.getX(), e.getY());
+            mainWindow.onClickDraw(e.getX(), e.getY(), getGraphics());
+            x1 = e.getX();
+            y1 = e.getY();
+        }
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 
-        mouseReleased = true;
-        mouseDragging = false;
-        myWindow.onRelease(e.getX(), e.getY());
-        x2 = e.getX();
-        y2 = e.getY();
+        if(SwingUtilities.isLeftMouseButton(e)) {
+            mouseReleased = true;
+            mouseDragging = false;
+            mainWindow.onRelease(e.getX(), e.getY());
+            x2 = e.getX();
+            y2 = e.getY();
+        }
         
 	}
 
@@ -130,18 +161,20 @@ public class Board extends JPanel
 	@Override
 	public void mouseDragged(MouseEvent e) {
 
-        mouseDragging = true;
-        mouseReleased = false;
-        myWindow.onDrag(e.getX(), e.getY());
-        myWindow.onClickDrag(e.getX(), e.getY(), getGraphics());
-        //System.out.println("board: "+e.getX()+" "+e.getY());
+        if(SwingUtilities.isLeftMouseButton(e)) {
+            mouseDragging = true;
+            mouseReleased = false;
+            mainWindow.onDrag(e.getX(), e.getY());
+            mainWindow.onClickDrag(e.getX(), e.getY(), getGraphics());
+            //System.out.println("board: "+e.getX()+" "+e.getY());
+        }
         
 
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-        myWindow.onMove(e.getX(), e.getY());
+        mainWindow.onMove(e.getX(), e.getY());
 	}
 
 	// refreshing

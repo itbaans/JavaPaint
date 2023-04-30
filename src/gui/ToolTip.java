@@ -31,32 +31,33 @@ public class ToolTip {
 
     public void drawToolTip(Graphics g, String data, int x, int y, int width, int height) {
         
-        int cellX = 0;
-        int cellY = 0;
-        FontMetrics m; 
+        int cellX = x + width;
+        int cellY = y + height;
+
+        g.setFont(font);
+
+        FontMetrics m = g.getFontMetrics();
+        int textWidh = m.stringWidth(data);
+        int textHeight = m.getHeight();
+
+        int cellWidth = textWidh + 20;
+        int cellHeight = textHeight + 20;
+
+        if(cellWidth + cellX > Dimensions.mainWindow_width) {
+            cellX = Dimensions.mainWindow_width - cellWidth;
+        }
+
+        if(cellHeight + cellY > Dimensions.MainWindow_height) {
+            cellY = Dimensions.MainWindow_height - cellHeight;
+        }
+
+        
         g.setColor(color);
-        if(x+width < Dimensions.canvas_width && !(y+height > Dimensions.canvas_height)) {
-            cellX = x+width;
-            cellY = y+height;
-        }
-        else if(y+height > Dimensions.canvas_height) {
-            cellX = x+width;
-            cellY = y-height; 
-        }
-        else {
-            cellX = x-width;
-            cellY = y+height;
-        }
-        m = g.getFontMetrics();
-      
-        //System.out.println(x+" "+(x+width));
-		int textWidth = m.stringWidth(data);      
-        int textHeight = m.getAscent() - m.getDescent();
-        Dimension cellDimension = new Dimension(textWidth+2, m.getHeight()+2);
-        g.fillRect(cellX, cellY, (int)cellDimension.getWidth(), (int)cellDimension.getHeight());
+        g.fillRect(cellX, cellY, cellWidth, cellHeight);
+
         g.setColor(Color.black);
-        g.setFont(font);      
-        g.drawString(data, cellX + (int)(cellDimension.getWidth()) / 2 - textWidth / 2, cellY + (int)(cellDimension.getHeight())/ 2 + textHeight / 2);
+        
+        g.drawString(data, cellX + 10, cellY+20);
         
 
     }
