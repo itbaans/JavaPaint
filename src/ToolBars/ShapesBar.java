@@ -210,7 +210,7 @@ public class ShapesBar extends Toolbar {
                    Circle circle = new Circle(diam, new Point(clickX, clickY), strokeColor, fillColor,strokeSize);
                    if(stack != null)
                    stack.push(circle);
-                   System.out.println("oush");
+                   //System.out.println("oush");
                    mouseReleased = false;
 
                }               
@@ -257,7 +257,7 @@ public class ShapesBar extends Toolbar {
 
                        Hexagon hexagon = new Hexagon(xpoints, ypoints, strokeColor, fillColor, strokeSize);
                        if(stack != null) stack.push(hexagon);
-                       System.out.println("oush");
+                       //System.out.println("oush");
                        mouseReleased = false;
                 }
                 break;
@@ -303,7 +303,7 @@ public class ShapesBar extends Toolbar {
 
                        Triangle equiTriangle = new Triangle(xpoints, ypoints, strokeColor, fillColor, strokeSize);
                        if(stack != null) stack.push(equiTriangle);
-                       System.out.println("oush");
+                       //System.out.println("oush");
                        mouseReleased = false;            
                 }
                 break;
@@ -363,7 +363,7 @@ public class ShapesBar extends Toolbar {
 
                     Triangle rightTriangle = new Triangle(xpoints, ypoints, strokeColor, fillColor, strokeSize);
                     if(stack != null) stack.push(rightTriangle);
-                    System.out.println("oush");
+                    //System.out.println("oush");
                     mouseReleased = false;
                 }
                 break;
@@ -422,7 +422,7 @@ public class ShapesBar extends Toolbar {
                         } else {
                             x = clickX + (int) ((distance/2) * Math.cos(Math.toRadians(54+(72*j))));
                             y = clickY - (int) ((distance/2) * Math.sin(Math.toRadians(54+(72*j))));
-                            System.out.println(j);
+                           //System.out.println(j);
                             j++;
                         }
 
@@ -433,7 +433,7 @@ public class ShapesBar extends Toolbar {
 
                     Pentagram pentagram = new Pentagram(xpoints, ypoints, strokeColor, fillColor, strokeSize);
                     if(stack != null) stack.push(pentagram);
-                    System.out.println("oush");
+                    //System.out.println("oush");
                     mouseReleased = false;            
                 }
                 break;
@@ -460,7 +460,7 @@ public class ShapesBar extends Toolbar {
                     }
                     mouseDragging = false;
                     if(stack != null) stack.push(freeDrawing);
-                    System.out.println("oush");
+                    //System.out.println("oush");
                     clickStorage.cleanStorage();
                     mouseReleased = false; 
                 }

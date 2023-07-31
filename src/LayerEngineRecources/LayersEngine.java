@@ -174,6 +174,11 @@ public class LayersEngine implements Serializable {
 
                 current = current.down;
             }
+
+            if(current.button.IsPressed() && current.down == null) {
+                System.out.println("layer 0 cannot be removed");
+                return;
+            }
         }
 
     }

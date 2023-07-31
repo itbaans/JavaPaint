@@ -117,7 +117,7 @@ public class Board extends JPanel
         if(SwingUtilities.isLeftMouseButton(e)) {
             mainWindow.onClick(e.getX(), e.getY());
 
-            System.out.println(e.getX()+" "+e.getY());
+            //System.out.println(e.getX()+" "+e.getY());
         }
 	}
 
