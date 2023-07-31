@@ -27,6 +27,7 @@ This repository contains the source code and documentation for my second-semeste
 - Color picking from a gradient tool.
 
 ## Preview
+![Project Preview](/preview.png)
 
 
 ## Installation
